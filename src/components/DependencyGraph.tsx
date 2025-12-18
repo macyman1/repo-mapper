@@ -14,7 +14,12 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import type { RepoAnalysis } from '@/lib/analysis/types';
 
-export default function DependencyGraph({ data }: { data: RepoAnalysis }) {
+interface DependencyGraphProps {
+    data: RepoAnalysis;
+    onNodeClick?: (path: string) => void;
+}
+
+export default function DependencyGraph({ data, onNodeClick }: DependencyGraphProps) {
     const { nodes: initialNodes, edges: initialEdges } = useMemo(() => {
         const nodes: Node[] = [];
         const edges: Edge[] = [];
@@ -119,6 +124,7 @@ export default function DependencyGraph({ data }: { data: RepoAnalysis }) {
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
+                onNodeClick={(_, node) => onNodeClick?.(node.id)}
                 fitView
             >
                 <Background color="#334155" gap={16} />

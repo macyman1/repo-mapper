@@ -12,10 +12,11 @@ export async function GET(req: Request) {
     try {
         let rootPath = process.cwd();
         let isTemp = false;
+        let repoUrl = '';
 
         if (rawUrl) {
             // CLEAN THE URL: Remove query parameters (like ?tab=readme...)
-            const repoUrl = rawUrl.split('?')[0];
+            repoUrl = rawUrl.split('?')[0];
 
             // Create temp dir
             const tmpDir = os.tmpdir();
@@ -32,6 +33,18 @@ export async function GET(req: Request) {
         }
 
         const data = await scanRepository(rootPath);
+
+        // Enrich data with remote info
+        if (isTemp && repoUrl) {
+            data.url = repoUrl;
+            // Get Commit Hash as branch ref (immutable)
+            const git = simpleGit(rootPath);
+            const hash = await git.revparse(['HEAD']);
+            data.branch = hash.trim();
+        } else {
+            data.url = '';
+            data.branch = '';
+        }
 
         // Cleanup if temp
         if (isTemp) {

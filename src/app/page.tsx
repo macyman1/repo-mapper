@@ -5,12 +5,14 @@ import type { RepoAnalysis, FileNode } from '@/lib/analysis/types';
 import styles from './home.module.css';
 import Chat from '@/components/Chat';
 import DependencyGraph from '@/components/DependencyGraph';
+import FileViewer from '@/components/FileViewer';
 
 export default function Home() {
   const [data, setData] = useState<RepoAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [repoUrl, setRepoUrl] = useState('');
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
   // Initial local analyze (optional, maybe skip auto-load now?)
   // Let's keep auto-load of local for dev convenience, or default to empty?
@@ -137,7 +139,10 @@ export default function Home() {
             <div className={styles.structureCard} style={{ gridColumn: '1 / -1', marginTop: 0 }}>
               <h2 className={styles.cardTitle}>Global Import Graph</h2>
               {/* Dynamic Import: This component uses window, so might need no-ssr if React Flow issues arise, but strictly 'use client' is usually fine */}
-              <DependencyGraph data={data} />
+              <DependencyGraph
+                data={data}
+                onNodeClick={(path) => setSelectedFile(path)}
+              />
             </div>
           </div>
 
@@ -156,6 +161,15 @@ export default function Home() {
             // Limit structure size for context prompt
             structure_summary: "Full structure available on request"
           }} />
+
+          {selectedFile && (
+            <FileViewer
+              filePath={selectedFile}
+              repoUrl={data.url}
+              branch={data.branch}
+              onClose={() => setSelectedFile(null)}
+            />
+          )}
         </>
       )}
     </main>

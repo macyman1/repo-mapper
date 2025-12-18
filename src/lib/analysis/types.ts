@@ -17,4 +17,6 @@ export interface RepoAnalysis {
     languages: Record<string, number>; // Language -> Count
     dependencies: Record<string, string[]>; // Manager -> Dependencies
     imports?: Record<string, string[]>; // File -> Imports
+    url?: string; // Remote URL
+    branch?: string; // Remote Branch
 }
