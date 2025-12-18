@@ -31,7 +31,11 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => 
     dagreGraph.setDefaultEdgeLabel(() => ({}));
 
     const isHorizontal = direction === 'LR';
-    dagreGraph.setGraph({ rankdir: direction });
+    dagreGraph.setGraph({
+        rankdir: direction,
+        ranksep: 150, // Vertical spacing between ranks (levels)
+        nodesep: 50   // Horizontal spacing between nodes
+    });
 
     nodes.forEach((node) => {
         dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
@@ -93,7 +97,8 @@ const getNodeColor = (fileName: string) => {
 };
 
 export default function DependencyGraph({ data, onNodeClick }: DependencyGraphProps) {
-    const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
+    // Basic graph data construction
+    const { nodes: baseNodes, edges: baseEdges } = useMemo(() => {
         if (!data.imports) return { nodes: [], edges: [] };
 
         const allFiles = getAllFiles(data.root);
@@ -124,6 +129,7 @@ export default function DependencyGraph({ data, onNodeClick }: DependencyGraphPr
                     width: nodeWidth,
                     padding: '8px',
                     textAlign: 'center',
+                    transition: 'all 0.2s', // Smooth fade
                 }
             });
             addedNodes.add(path);
@@ -198,8 +204,9 @@ export default function DependencyGraph({ data, onNodeClick }: DependencyGraphPr
                     id: `${source}-${targetId}`,
                     source,
                     target: targetId,
+                    type: 'smoothstep', // Cleaner lines
                     animated: true,
-                    style: { stroke: '#475569' },
+                    style: { stroke: '#475569', strokeWidth: 1.5 },
                     markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' }
                 });
             });
@@ -212,8 +219,57 @@ export default function DependencyGraph({ data, onNodeClick }: DependencyGraphPr
         return getLayoutedElements(nodes, edges);
     }, [data]);
 
-    const [nodes, , onNodesChange] = useNodesState(layoutedNodes);
-    const [edges, , onEdgesChange] = useEdgesState(layoutedEdges);
+    const [nodes, setNodes, onNodesChange] = useNodesState(baseNodes);
+    const [edges, setEdges, onEdgesState] = useEdgesState(baseEdges);
+
+    // Update state when data changes
+    useMemo(() => {
+        setNodes(baseNodes);
+        setEdges(baseEdges);
+    }, [baseNodes, baseEdges, setNodes, setEdges]);
+
+    // Focus Mode Logic
+    const onNodeMouseEnter = useCallback((_: React.MouseEvent, node: Node) => {
+        const connectedEdgeIds = new Set<string>();
+        const connectedNodeIds = new Set<string>();
+        connectedNodeIds.add(node.id);
+
+        // Find connected edges and nodes
+        baseEdges.forEach(edge => {
+            if (edge.source === node.id || edge.target === node.id) {
+                connectedEdgeIds.add(edge.id);
+                connectedNodeIds.add(edge.source);
+                connectedNodeIds.add(edge.target);
+            }
+        });
+
+        setNodes(nds => nds.map(n => ({
+            ...n,
+            style: {
+                ...n.style,
+                opacity: connectedNodeIds.has(n.id) ? 1 : 0.1,
+                // Highlight connected nodes slightly
+                borderWidth: connectedNodeIds.has(n.id) && n.id !== node.id ? '2px' : '1px'
+            }
+        })));
+
+        setEdges(eds => eds.map(e => ({
+            ...e,
+            style: {
+                ...e.style,
+                opacity: connectedEdgeIds.has(e.id) ? 1 : 0.05,
+                strokeWidth: connectedEdgeIds.has(e.id) ? 2.5 : 1.5,
+                stroke: connectedEdgeIds.has(e.id) ? '#3b82f6' : '#475569'
+            },
+            animated: connectedEdgeIds.has(e.id) // Only animate active path
+        })));
+    }, [baseEdges, setNodes, setEdges]);
+
+    const onNodeMouseLeave = useCallback(() => {
+        // Reset styles
+        setNodes(baseNodes);
+        setEdges(baseEdges);
+    }, [baseNodes, baseEdges, setNodes, setEdges]);
 
     if (nodes.length === 0) {
         return (
@@ -229,8 +285,10 @@ export default function DependencyGraph({ data, onNodeClick }: DependencyGraphPr
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
+                onEdgesChange={onEdgesState}
                 onNodeClick={(_, node) => onNodeClick?.(node.id)}
+                onNodeMouseEnter={onNodeMouseEnter}
+                onNodeMouseLeave={onNodeMouseLeave}
                 fitView
                 minZoom={0.1}
             >
@@ -243,10 +301,12 @@ export default function DependencyGraph({ data, onNodeClick }: DependencyGraphPr
                     }}
                 />
                 <Panel position="top-right" className="bg-slate-800 p-2 rounded-md border border-slate-700 text-xs text-slate-300">
-                    <div className="flex gap-2 items-center">
-                        <span className="w-3 h-3 rounded-full bg-blue-500"></span> TS/TSX
-                        <span className="w-3 h-3 rounded-full bg-yellow-500"></span> JS/JSX
-                        <span className="w-3 h-3 rounded-full bg-pink-500"></span> CSS
+                    <div className="flex flex-col gap-1">
+                        <div className="font-semibold mb-1 border-b border-slate-600 pb-1">File Types</div>
+                        <div className="flex gap-2 items-center"><span className="w-3 h-3 rounded-full bg-blue-500"></span> TS/TSX</div>
+                        <div className="flex gap-2 items-center"><span className="w-3 h-3 rounded-full bg-yellow-500"></span> JS/JSX</div>
+                        <div className="flex gap-2 items-center"><span className="w-3 h-3 rounded-full bg-pink-500"></span> CSS</div>
+                        <div className="mt-2 text-[10px] text-slate-400">Hover node to focus</div>
                     </div>
                 </Panel>
             </ReactFlow>
