@@ -59,7 +59,20 @@ export default function FileViewer({ filePath, repoUrl, branch, onClose }: FileV
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `Summarize the purpose and functionality of this file code in 2-3 sentences:\n\n${content.slice(0, 5000)}`, // Truncate for token limits
+                    message: `You are an expert code analyst.
+File Name: "${filePath}"
+
+Here is the code content:
+\`\`\`
+${content.slice(0, 5000)}
+\`\`\`
+
+Please analyze this file.
+1. What is its primary responsibility?
+2. What are the key internal functions or components?
+3. How does it fit into the broader project architecture?
+
+Keep the summary concise (approx 3-4 sentences).`,
                     context: {}, // No extra context needed
                     config
                 })

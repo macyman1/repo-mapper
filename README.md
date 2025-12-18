@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RepoMapper
+
+RepoMapper is an advanced, AI-powered tool for visualizing, analyzing, and understanding GitHub repositories. It transforms static codebases into interactive, explorable knowledge graphs.
+
+## Features
+
+### 🔍 Deep Analysis
+-   **Structure Scanning**: Instantly map the file system hierarchy.
+-   **Dependency Tracking**: Identify internal imports and external package dependencies across multiple languages (TS/JS, Python, Go, etc.).
+-   **Language Breakdown**: Visualize the technological makeup of the repository.
+
+### 🕸️ Interactive Visualization
+-   **Dependency Graph**: A powerful `dagre`-based directed graph visualization of your codebase.
+    -   **Hierarchical Layout**: clear "top-to-bottom" dependency flow.
+    -   **Focus Mode**: Hover over any node to highlight relevant connections and fade out noise.
+    -   **Full Screen Mode**: Expand the graph to explore large codebases comfortably.
+    -   **Smart Linking**: Automatically resolves relative paths (`../utils`) and aliases (`@/components`).
+
+### 🧠 AI Integration
+-   **Contextual Chat**: Chat with an AI (Gemini or Custom LLM) that understands your *entire* repository context.
+-   **Code Summarization**: Click on any file to get an instant AI-generated explanation of its purpose and functionality.
+-   **Custom Logic**: Connect to your own LLM endpoints (Standard OpenAI-compatible) if you prefer local models (like Ollama) or other providers.
+
+### 📂 File Exploration
+-   **Integrated Viewer**: Browse file contents directly within the app.
+-   **Syntax Highlighting**: Clean, readable code display.
 
 ## Getting Started
 
-First, run the development server:
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/yourusername/repo-mapper.git
+    cd repo-mapper
+    ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3.  **Configure AI (Optional but Recommended)**:
+    -   Create a `.env.local` file.
+    -   Add your Gemini API Key: `GEMINI_API_KEY=your_key_here`.
+    -   *Alternatively, configure a Custom LLM URL directly in the UI settings.*
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4.  **Run the application**:
+    ```bash
+    npm run dev
+    ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5.  **Analyze**:
+    -   Open [http://localhost:3000](http://localhost:3000).
+    -   Enter a GitHub URL (e.g., `https://github.com/facebook/react`) or analyze the local directory.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech Stack
+-   **Framework**: Next.js 14+ (App Router)
+-   **Visualization**: React Flow, Dagre
+-   **Styling**: CSS Modules
+-   **AI**: Google Generative AI SDK
