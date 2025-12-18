@@ -145,9 +145,43 @@
 .loading,
 .error {
     padding: 2rem;
-}
-
-.error {
     color: #ef4444;
     /* Red 500 */
+}
+
+.searchBar {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    max-width: 600px;
+}
+
+.searchInput {
+    flex: 1;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    color: var(--foreground);
+    outline: none;
+    font-family: var(--font-sans);
+}
+
+.searchInput:focus {
+    border-color: var(--primary);
+}
+
+.searchButton {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.searchButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

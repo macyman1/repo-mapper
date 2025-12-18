@@ -83,9 +83,9 @@ export default function Chat({ context }: { context?: any }) {
             if (data.error) throw new Error(data.error);
 
             setMessages(prev => [...prev, { role: 'ai', content: data.reply }]);
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            setMessages(prev => [...prev, { role: 'ai', content: 'Sorry, I encountered an error. Please check your settings and API key.' }]);
+            setMessages(prev => [...prev, { role: 'ai', content: `Error: ${error.message || 'Check settings and try again.'}` }]);
         } finally {
             setLoading(false);
         }
