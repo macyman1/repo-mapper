@@ -1,0 +1,208 @@
+.chatContainer {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 400px;
+    max-width: calc(100vw - 4rem);
+    height: 600px;
+    max-height: calc(100vh - 4rem);
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 50;
+}
+
+.chatContainer.collapsed {
+    height: auto;
+    width: auto;
+    border-radius: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--card-border);
+    cursor: pointer;
+}
+
+.title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.message {
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 85%;
+}
+
+.userMessage {
+    background-color: var(--primary);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.aiMessage {
+    background-color: var(--card-border);
+    color: var(--foreground);
+    align-self: flex-start;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.inputArea {
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.input {
+    flex: 1;
+    background-color: var(--background);
+    border: 1px solid var(--card-border);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    color: var(--foreground);
+    outline: none;
+}
+
+.input:focus {
+    border-color: var(--primary);
+}
+
+.sendButton {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.sendButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.toggleButton {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.settingsPanel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.settingsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.settingsTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+.radioGroup {
+    display: flex;
+    gap: 1rem;
+}
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.inputField {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    color: var(--foreground);
+    font-size: 0.9rem;
+    outline: none;
+    width: 100%;
+}
+
+.inputField:focus {
+    border-color: var(--primary);
+}
+
+.saveButton {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+.saveButton:hover {
+    opacity: 0.9;
+}

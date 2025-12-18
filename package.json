@@ -8,9 +8,16 @@
     "start": "next start"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
+    "lucide-react": "^0.561.0",
     "next": "16.0.10",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "reactflow": "^11.11.4",
+    "recharts": "^3.6.0",
+    "simple-git": "^3.30.0"
   },
   "devDependencies": {
     "@types/node": "^20",
